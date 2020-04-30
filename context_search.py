@@ -1,7 +1,6 @@
+import pandas as pd
 import re
 import spacy
-import pandas as pd
-
 from spacy.matcher import Matcher
 
 TEXTS = [
@@ -20,12 +19,10 @@ def print_results(small):
         if i: 
             for a in i:
                 print(a, end=', ')
-    
-
+                
 def main():
     print("Processing %d texts" % len(TEXTS))
     df = pd.read_excel('sampledata.xlsx')
-
     for text in TEXTS:
         text_split = text.split()
         if len(text_split) < 4:
@@ -52,7 +49,6 @@ def extract_currency_relations(doc):
     with doc.retokenize() as retokenizer:
         for span in spans:
             retokenizer.merge(span)
-
     relations = []
     for money in filter(lambda w: w.ent_type_ == "MONEY", doc):
         for i in money.children:
@@ -61,7 +57,6 @@ def extract_currency_relations(doc):
             elif money.dep_ in ("pobj", "dobj"):
                 relations.append((money.head.head, i, money))
     return relations
-
 
 if __name__ == "__main__":
     main()
