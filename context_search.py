@@ -26,8 +26,9 @@ def main():
     for text in TEXTS:
         text_split = text.split()
         if len(text_split) < 4:
-            small = df["Description"].str.findall('.*?'+'.*'.join(text_split)+'.*', re.I)
-            print_results(small)
+            for sen in df["Description"]:
+                if (all(map(lambda word: word in sen.lower(), text_split))):
+                    print(sen)
         doc = nlp(text)
         matcher = Matcher(nlp.vocab)
         matcher.add("MONEY",add_money_ent, [{'LIKE_NUM': True}, {'LOWER': "rupees"}])
